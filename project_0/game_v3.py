@@ -15,9 +15,13 @@ def not_random_predict(number: int=1) -> int:
         int: number of attempts
     """
     
+    #create counter of attemots
     count = 0
+    
     #first predicted number
     predict_number = np.random.randint(1,101)
+    
+    #create extreme points of number search range 
     point1 = 1
     point2 = 101
     
@@ -27,49 +31,63 @@ def not_random_predict(number: int=1) -> int:
         
         
         if number == predict_number:
-            print(f'Number was {predict_number}')
             break #exit the loop when number is guessed
         
+        #if number is less then predicted - change the upper point of the range
+        #and choose new number of the new, smaller range
         elif number < predict_number:
             point2 = predict_number
             predict_number = np.random.randint(point1, predict_number)
             
+            #if number is bigger then predicted - change the lower point of the range
+            #and choose new number of the new, smaller range
             if predict_number < number:
                 point1 = predict_number
                 predict_number = np.random.randint(point1, point2)
         
+        #if number is bigger then predicted - change the lower point of the range
+        #and choose new number of the new, smaller range
         else:
             point1 = predict_number
             predict_number = np.random.randint(predict_number, point2)
             
+            #if number is less then predicted - change the upper point of the range
+            #and choose new number of the new, smaller range
             if predict_number > number:
                 point2 = predict_number
                 predict_number = np.random.randint(point1, point2)
             
+    #So, we made range of search smaller and smaller till number was guessed
+    #Function returns number of attempts
     return(count)
+
 
 print(f'Количество попыток: {not_random_predict(98)}')
 
 
 def score_game(not_random_predict) -> int:
-    """За какое количество попыток в среднем алгоритм угадывает число.\
-       Среднее вычисляется из 1000 подходов
+    """For how many attempts on average the algorithm guesses the number.
+       The average is calcelated from 1000 runs.
 
     Args:
-        random_predict (_type_): функция угадывания чисел
+        random_predict (_type_): number guessing function
 
     Returns:
-        int: среднее количество попыток
+        int: average number of attempts
     """
-    
-    count_ls = [] #создаем список для подсчета количества попыток в каждом запуске
-    np.random.seed(1) #фиксируем сид для воспроизводимости
-    #создаем список из 1000 элементов из случайных чисел от 1 до 100 
+    #creating counter of attempts in each run
+    count_ls = []
+    #fixing seed for reproducibility
+    np.random.seed(1)
+    #creating list of 1000 elements from random numbers from 1 to 100 
     random_array = np.random.randint(1, 101, size = (1000))
     
+    #run function ot_random_predict 1000 times using numbers from random_array
+    #append results (number of attempts for each run) in count_ls
     for number in random_array:
         count_ls.append(not_random_predict(number))
     
+    #counting average number of attempts
     score = int(np.mean(count_ls))
     
     print(f'Ваш алгоритм справляется в среднем за {score} попыток')
