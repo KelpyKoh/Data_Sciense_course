@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Ignore any file named dst-3.0_16_1_hh_database.csv
+dst-3.0_16_1_hh_database.csv
